@@ -2,3 +2,5 @@ go-app.exe
 go-app.exe~
 
 .env
+db_data
+main

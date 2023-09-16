@@ -1,0 +1,54 @@
+version: "3"
+services:
+  app:
+    container_name: go_app
+    build: .
+    ports:
+      - 8080:8000
+    restart: on-failure
+    volumes:
+      - .:/usr/src/app/
+    depends_on:
+      - mysql_db
+    networks:
+      - fullstack
+
+  mysql_db:
+    image: mysql:5.7
+    container_name: mysql_db
+    ports:
+      - 3305:3306
+    environment:
+      - MYSQL_ROOT_HOST=${DB_HOST}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - fullstack
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_container
+    depends_on:
+      - mysql_db
+    environment:
+      - PMA_HOST=mysql_db # Note the "mysql_db". Must be the name of the what you used as the mysql service.
+      - PMA_USER=${DB_USER}
+      - PMA_PORT=${DB_PORT}
+      - PMA_PASSWORD=${DB_PASSWORD}
+    ports:
+      - 9090:80
+    restart: always
+    networks:
+      - fullstack
+
+volumes:
+  db_data:
+
+# Networks to be created to facilitate communication between containers
+networks:
+  fullstack:
+    driver: bridge

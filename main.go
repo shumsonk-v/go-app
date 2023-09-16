@@ -27,5 +27,5 @@ func main() {
 	r.GET("/auth", middlewares.RequireAuth, controllers.GetAuthenticatedUser)
 	r.GET("/users", middlewares.RequireAuth, controllers.GetUsers)
 
-	r.Run()
+	r.Run(":8000")
 }
