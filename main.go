@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/gin-gonic/gin"
 
 	"go-app/controllers"
@@ -26,6 +29,8 @@ func main() {
 	r.POST("/login", controllers.Login)
 	r.GET("/auth", middlewares.RequireAuth, controllers.GetAuthenticatedUser)
 	r.GET("/users", middlewares.RequireAuth, controllers.GetUsers)
+
+	fmt.Printf("Server is now running at http://localhost:%s", os.Getenv("PORT"))
 
 	r.Run(":8000")
 }
